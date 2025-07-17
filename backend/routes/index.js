@@ -1,5 +1,10 @@
 import express from "express";
-import userRoutes from "./user.js";
+import createUser from "./auth/createUser.js";
+import signin from "./auth/signin.js";
+import updateUser from "./auth/updateUser.js";
+import getUserById from "./auth/getUserById.js";
+import deleteUser from "./auth/deleteUser.js";
+import summaryRoutes from "./summary.js";
 
 const router = express.Router();
 
@@ -7,6 +12,11 @@ router.get("/", (req, res) => {
   res.send("Backend is running!");
 });
 
-router.use("/api/auth", userRoutes);
+router.use("/api/auth", createUser);
+router.use("/api/auth", signin);
+router.use("/api/auth", updateUser);
+router.use("/api/auth", getUserById);
+router.use("/api/auth", deleteUser);
+router.use("/api", summaryRoutes);
 
 export default router;

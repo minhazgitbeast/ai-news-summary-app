@@ -4,32 +4,32 @@ import cors from "cors";
 import dotenv from "dotenv";
 import routes from "./routes/index.js";
 
+// Load .env config
 dotenv.config();
+
+// Config values directly in app.js
+const PORT = process.env.PORT;
+const MONGO_URI = process.env.MONGO_URI;
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!MONGO_URI || !JWT_SECRET) {
+  throw new Error("❌ Environment variables missing (MONGO_URI or JWT_SECRET)");
+}
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-//-----------------------Config--------------------------------------------------
-const config = {
-  PORT: process.env.PORT || 5000,
-  MONGO_URI:
-    process.env.MONGO_URI || "mongodb://localhost:27017/ai-news-summary",
-  JWT_SECRET:
-    process.env.JWT_SECRET ||
-    "8f9a8f799dad4d3bce56f00c2bd21a147d534871c6cdb94ef4ae4e268a118db0",
-};
-
-//-----------------------------------Routes-------------------------------------------------
+// Routes
 app.use("/", routes);
 
-//-------------------------------------MongoDB connect-----------------------------------------
+// MongoDB connection
 mongoose
-  .connect(config.MONGO_URI)
+  .connect(MONGO_URI)
   .then(() => {
     console.log("MongoDB connected");
-    app.listen(config.PORT, () => {
-      console.log(`Server running on http://localhost:${config.PORT}`);
+    app.listen(PORT, () => {
+      console.log(`Server running at http://localhost:${PORT}`);
     });
   })
-  .catch((err) => console.error("MongoDB Error:", err));
+  .catch((err) => console.error("❌ MongoDB Error:", err));
