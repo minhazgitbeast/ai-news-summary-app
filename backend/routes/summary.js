@@ -12,12 +12,12 @@ router.post("/summary", verifyToken, async (req, res) => {
 
   try {
     // Placeholder for AI summarization
-    // Later replace with real AI call (OpenAI, Together, Gemini, etc.)
+    // Later replace with real AI call 
 
-    const summary = `🔍 Summary of the content from: ${url}`;
+    const summary = `Summary of the content from: ${url}`;
 
     // Example structure for future integration
-    // const aiSummary = await generateSummaryFromURL(url); // ⬅️ to be implemented
+    // const aiSummary = await generateSummaryFromURL(url); // to be implemented
 
     res.json({ summary });
   } catch (err) {
