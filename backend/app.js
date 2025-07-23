@@ -13,7 +13,7 @@ const MONGO_URI = process.env.MONGO_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
 
 if (!MONGO_URI || !JWT_SECRET) {
-  throw new Error("❌ Environment variables missing (MONGO_URI or JWT_SECRET)");
+  throw new Error("Environment variables missing (MONGO_URI or JWT_SECRET)");
 }
 
 const app = express();
@@ -32,4 +32,4 @@ mongoose
       console.log(`Server running at http://localhost:${PORT}`);
     });
   })
-  .catch((err) => console.error("❌ MongoDB Error:", err));
+  .catch((err) => console.error("MongoDB Error:", err));
