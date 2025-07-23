@@ -1,6 +1,7 @@
 import express from "express";
 import User from "../../models/User.js";
 import verifyToken from "../../middleware/auth.js";
+import logger from "../../logger.js";
 
 const router = express.Router();
 
@@ -11,11 +12,26 @@ router.put("/update/:id", verifyToken, async (req, res) => {
       new: true,
     });
 
-    if (!updatedUser)
+    if (!updatedUser) {
+      logger.error({
+        message: "User not found",
+        id: req.params.id,
+        status: 404,
+        route: "/update/:id",
+        time: new Date().toISOString(),
+      });
       return res.status(404).json({ message: "User not found" });
+    }
 
     res.json(updatedUser);
   } catch (err) {
+    logger.error({
+      message: "Update failed",
+      id: req.params.id,
+      status: 500,
+      route: "/update/:id",
+      time: new Date().toISOString(),
+    });
     res.status(500).json({ message: "Update failed", error: err.message });
   }
 });
