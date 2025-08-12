@@ -3,9 +3,12 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import routes from "./routes/index.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Load .env config
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 // Config values directly in app.js
 const PORT = process.env.PORT;
@@ -17,7 +20,13 @@ if (!MONGO_URI || !JWT_SECRET) {
 }
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 
 // Routes

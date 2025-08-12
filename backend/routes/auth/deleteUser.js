@@ -8,6 +8,7 @@ const router = express.Router();
 router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
+
     if (!user) {
       logger.error({
         message: "User not found",
@@ -15,10 +16,10 @@ router.delete("/:id", verifyToken, async (req, res) => {
         route: req.originalUrl,
         time: new Date().toISOString(),
       });
+      return res.status(404).json({ message: "User not found" });
     }
-    return res.status(404).json({ message: "User not found" });
 
-    res.json({ message: "User deleted successfully" });
+    res.json({ message: "User deleted successfully" }); // ✅ Now reachable
   } catch (err) {
     logger.error({
       message: "Deletion failed",

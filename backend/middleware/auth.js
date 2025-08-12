@@ -1,10 +1,6 @@
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
-
-if (!JWT_SECRET) throw new Error("JWT_SECRET not set in environment");
 
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -17,7 +13,7 @@ const verifyToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = { userId: decoded.userId };
+    req.user = { userId: decoded.id };
     next();
   } catch (err) {
     return res.status(401).json({ message: "Invalid token" });

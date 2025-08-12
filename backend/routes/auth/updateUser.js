@@ -5,7 +5,7 @@ import logger from "../../logger.js";
 
 const router = express.Router();
 
-router.put("/update/:id", verifyToken, async (req, res) => {
+router.put("/:id", verifyToken, async (req, res) => {
   try {
     const updates = req.body;
     const updatedUser = await User.findByIdAndUpdate(req.params.id, updates, {
@@ -17,7 +17,7 @@ router.put("/update/:id", verifyToken, async (req, res) => {
         message: "User not found",
         id: req.params.id,
         status: 404,
-        route: "/update/:id",
+        route: "/:id",
         time: new Date().toISOString(),
       });
       return res.status(404).json({ message: "User not found" });
@@ -29,7 +29,8 @@ router.put("/update/:id", verifyToken, async (req, res) => {
       message: "Update failed",
       id: req.params.id,
       status: 500,
-      route: "/update/:id",
+      route: "/:id",
+      error: err.message,
       time: new Date().toISOString(),
     });
     res.status(500).json({ message: "Update failed", error: err.message });
