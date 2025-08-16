@@ -70,7 +70,7 @@ const getSummaryAndKeywords = async (text) => {
         },
         {
           role: "user",
-          content: `Summarize the following text in 50-100 words and extract keywords. Format your response as: [Summary] Keywords: [comma-separated keywords]\n${text}`,
+          content: `Summarize the following text in exactly 75-100 words and extract 3-5 keywords. Do not repeat information. Format your response as: [Summary] Keywords: [comma-separated keywords]\n${text}`,
         },
       ],
       max_tokens: 300,
