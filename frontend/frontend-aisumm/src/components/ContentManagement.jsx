@@ -4,6 +4,9 @@ import axios from "axios";
 const ContentManagement = () => {
   const token = localStorage.getItem("token");
 
+  // Use backend URL from .env
+  const API_URL = import.meta.env.VITE_API_URL;
+
   // Summaries display
   const [contents, setContents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -45,7 +48,7 @@ const ContentManagement = () => {
       setError("");
 
       const res = await axios.get(
-        `http://localhost:5000/api/summary?page=${page}&limit=${limit}`,
+        `${API_URL}/api/summary?page=${page}&limit=${limit}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -142,13 +145,9 @@ const ContentManagement = () => {
         ? { url: newContent.content, save: true }
         : { text: newContent.content, save: true };
 
-      const response = await axios.post(
-        "http://localhost:5000/api/openai",
-        body,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.post(`${API_URL}/api/openai`, body, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       const summarizedText = response.data?.summary || "";
       setNewContent({ content: summarizedText });
@@ -184,12 +183,9 @@ const ContentManagement = () => {
       return;
 
     try {
-      await axios.delete(
-        `http://localhost:5000/api/summary/delete/${summaryId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axios.delete(`${API_URL}/api/summary/delete/${summaryId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       fetchContents(currentPage);
       if (searchedSummary && searchedSummary._id === summaryId)
         setSearchedSummary(null);
@@ -215,13 +211,9 @@ const ContentManagement = () => {
 
   const handleSave = async (summaryId) => {
     try {
-      await axios.put(
-        `http://localhost:5000/api/summary/${summaryId}`,
-        editedContent,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axios.put(`${API_URL}/api/summary/${summaryId}`, editedContent, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setEditingId(null);
       setEditedContent({ title: "", body: "" });
       fetchContents(currentPage);
@@ -248,7 +240,7 @@ const ContentManagement = () => {
 
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/summary/id/${searchSummaryId.trim()}`,
+        `${API_URL}/api/summary/id/${searchSummaryId.trim()}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

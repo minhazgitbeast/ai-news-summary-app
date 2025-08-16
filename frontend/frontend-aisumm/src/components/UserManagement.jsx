@@ -10,11 +10,14 @@ const UserManagement = () => {
   const [searchId, setSearchId] = useState("");
   const [searchedUser, setSearchedUser] = useState(null);
 
+  // Use backend URL from .env
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const token = localStorage.getItem("token");
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/auth/users", {
+      const res = await axios.get(`${API_URL}/api/auth/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (Array.isArray(res.data)) setUsers(res.data);
@@ -28,10 +31,9 @@ const UserManagement = () => {
     if (!searchId.trim()) return;
 
     try {
-      const res = await axios.get(
-        `http://localhost:5000/api/auth/user/${searchId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await axios.get(`${API_URL}/api/auth/user/${searchId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setSearchedUser(res.data);
     } catch (err) {
       console.error("User not found by ID:", err);
@@ -50,7 +52,7 @@ const UserManagement = () => {
 
   const handleUserUpdate = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/auth/${id}`, editedUserData, {
+      await axios.put(`${API_URL}/api/auth/${id}`, editedUserData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEditingUser(null);
@@ -62,7 +64,7 @@ const UserManagement = () => {
 
   const handleDeleteUser = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/auth/${id}`, {
+      await axios.delete(`${API_URL}/api/auth/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchUsers();
@@ -74,7 +76,7 @@ const UserManagement = () => {
   const handleAddUser = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/auth/signup", newUser, {
+      await axios.post(`${API_URL}/api/auth/signup`, newUser, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNewUser({ name: "", email: "", password: "" });
